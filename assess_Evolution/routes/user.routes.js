@@ -7,26 +7,26 @@ const UserRouter = express.Router();
 UserRouter.get("/", async (req,res)=>{
     try{
         let users = await UserModel.find({}); 
-        res.status(200).json({msg:"User List", users})
+        res.status(200).json({message:"User List", users})
     }catch(err){
-        res.status(500).json({msg:"Something went wrong please try again later"})
+        res.status(500).json({message:"Something went wrong, could you please try again later"})
     }
 })
 
 
 UserRouter.post("/add-user", async (req,res)=>{
     let user = await UserModel.create(req.body)
-    res.status(201).json({msg:"User added", user}); 
+    res.status(201).json({message:"User is added", user}); 
 })
 
 UserRouter.patch("/update-user/:userId", async (req,res)=>{
      const {userId} = req.params;
      let user = await UserModel.findById(userId);
      if(!user){
-        res.status(404).json({msg:"User Not Found"})
+        res.status(404).json({message:"User  is Not Found"})
      }else{
         await UserModel.findByIdAndUpdate(userId, req.body)
-        res.status(201).json({msg:"User Updated"})
+        res.status(201).json({message:"User is  Updated successfully"})
      }
 })
 
@@ -37,13 +37,13 @@ UserRouter.delete("/delete-user/:userId", async (req,res)=>{
         const {userId} = req.params;
     let user = await UserModel.findById(userId);
     if(!user){
-       res.status(404).json({msg:"User Not Found"})
+       res.status(404).json({message:"User is Not Found"})
     }else{
        await UserModel.findByIdAndDelete(userId)
-       res.status(200).json({msg:"User Deleted"})
+       res.status(200).json({message:"User is Deleted"})
     }
     }catch(err){
-        res.status(500).json({msg:"Something went wrong"})
+        res.status(500).json({message:"Something went wrong to delete"})
     }
 })
 
