@@ -1,9 +1,9 @@
 const express = require("express");
 const connectToDB = require("./configs/mongodb.config");
-const UserRouter = require("./routes/user.routes");
+const UserRouter = require("../routes/user.routes");
 
 const app = express();
-app.use(express.json()) ///body parser middleware
+app.use(express.json()) 
 connectToDB()
 /// test route
 app.get("/test", (req,res)=>{
@@ -20,8 +20,3 @@ app.listen(3000, ()=>{
     console.log("Server started...")
 })
 
-
-// step 1: basic express setup
-// step 2: connecting mongodb with nodejs
-// step 3: creating schema and model
-// step 4: create routes/controllers and test in Postman

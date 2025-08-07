@@ -19,11 +19,11 @@ const addressSchema = new mongoose.Schema({
    })
 
 const userSchema = new mongoose.Schema({
-    name:{type: String, required:true}, /// name field cannot be skipped
-    email:{type:String, required:true, unique:true}, /// no duplicate emails are allowed and email is cannot be skipped
-    password:{type:String, default:"pass123"}, // if user is sending password then okay or else it will be set to default as pass123 by mongoose
-    age:{type:Number, min:20, max:100},// age is validated between 20 to 100
-    gender:{type:String, enum:["male", "female"]} , // only words "male" or "female" are allowed, not "Male", "Fe-male", "fe-male" etc
+    name:{type: String, required:true}, 
+    email:{type:String, required:true, unique:true}, 
+    password:{type:String, default:"pass123"},  
+    age:{type:Number, min:20, max:100},
+    gender:{type:String, enum:["male", "female"]} , 
     orders:[ orderSchema],
     address:[ addressSchema], 
 
