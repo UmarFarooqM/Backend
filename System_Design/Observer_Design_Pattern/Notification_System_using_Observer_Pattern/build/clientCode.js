@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const devices_1 = require("./devices");
+const types_1 = require("./types");
+let notificationCenter = new types_1.NotificationCenter();
+let myMobile = new devices_1.Mobile();
+let myTablet = new devices_1.Tablet();
+notificationCenter.attach(myMobile);
+notificationCenter.attach(myTablet);
+notificationCenter.notifyAll();
+notificationCenter.detach(myMobile);
+notificationCenter.notifyAll();
