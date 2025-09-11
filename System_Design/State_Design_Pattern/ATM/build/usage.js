@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const states_1 = require("./states");
+const types_1 = require("./types");
+let paymentProcess = new types_1.PaymentProcess(new states_1.Idle());
+paymentProcess.process();
+paymentProcess.process();
+paymentProcess.process();
+paymentProcess.process();
+paymentProcess.process();

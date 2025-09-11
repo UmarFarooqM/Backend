@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const document_1 = require("./document");
+const draftState_1 = require("./states/draftState");
+const user_1 = require("./user");
+let admin = new user_1.User("admin");
+let editor = new user_1.User("editor");
+let movieScript = new document_1.MovieScript(new draftState_1.DraftState());
+movieScript.publish(editor);
+movieScript.publish(admin);
+movieScript.publish(admin);

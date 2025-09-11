@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const States_1 = require("./States");
+const types_1 = require("./types");
+let player = new types_1.MediaPlayer(new States_1.PlayState());
+player.play();
+player.stop();
+player.pause();
+player.play();
+player.pause();
+player.play();
