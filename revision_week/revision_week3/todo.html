@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple To-Do</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        text-align: center;
+        padding: 30px;
+      }
+      #inputBox {
+        padding: 8px;
+        width: 200px;
+      }
+      button {
+        padding: 8px 12px;
+        margin-left: 4px;
+        cursor: pointer;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        max-width: 300px;
+        margin: 20px auto;
+      }
+      li {
+        background: #fff;
+        padding: 8px;
+        margin: 6px 0;
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+      li.completed span {
+        text-decoration: line-through;
+        color: #777;
+      }
+      .delete {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        border-radius: 4px;
+      }
+      #clearBtn {
+        background: #f39c12;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>📝 Simple To-Do</h2>
+
+    <input id="inputBox" type="text" placeholder="New task" />
+    <button onclick="addTask()">Add</button>
+
+    <ul id="list"></ul>
+
+    <button id="clearBtn" onclick="clearCompleted()">Clear Completed</button>
+
+    <script>
+      function addTask() {
+        const text = document.getElementById("inputBox").value.trim();
+        if (!text) return;
+        const li = document.createElement("li");
+
+        const span = document.createElement("span");
+        span.textContent = text;
+        span.onclick = () => li.classList.toggle("completed");
+
+        const del = document.createElement("button");
+        del.textContent = "Delete";
+        del.className = "delete";
+        del.onclick = () => li.remove();
+
+        li.append(span, del);
+        document.getElementById("list").appendChild(li);
+        document.getElementById("inputBox").value = "";
+      }
+
+      function clearCompleted() {
+        document
+          .querySelectorAll("#list li.completed")
+          .forEach((li) => li.remove());
+      }
+    </script>
+  </body>
+</html>

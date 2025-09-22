@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Meals App</title>
+<style>
+  body { font-family: Arial, sans-serif; text-align:center; background:#f5f5f5; }
+  h2 { margin:20px 0; }
+  input, select { padding:6px; margin:10px; }
+  #meals { display:flex; flex-wrap:wrap; justify-content:center; gap:15px; margin-top:20px; }
+  .card { width:200px; background:#fff; border:1px solid #ccc; border-radius:8px; padding:10px; }
+  .card img { width:100%; border-radius:6px; }
+  .name { font-weight:bold; margin:6px 0; }
+  .info { font-size:14px; color:#555; }
+</style>
+</head>
+<body>
+
+<h2>🍽 Meals (Letter A)</h2>
+
+<input id="search" type="text" placeholder="Search name or category">
+<select id="sort">
+  <option value="">Sort</option>
+  <option value="name-asc">Name A→Z</option>
+  <option value="name-desc">Name Z→A</option>
+  <option value="area-asc">Area A→Z</option>
+  <option value="area-desc">Area Z→A</option>
+</select>
+
+<div id="meals"></div>
+
+<script>
+const box = document.getElementById('meals');
+const search = document.getElementById('search');
+const sort = document.getElementById('sort');
+let data = [];
+
+async function getMeals(){
+  const res = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?f=a');
+  const json = await res.json();
+  data = json.meals || [];
+  show(data);
+}
+
+function show(list){
+  box.innerHTML = list.map(m=>`
+    <div class="card">
+      <img src="${m.strMealThumb}" alt="">
+      <div class="name">${m.strMeal}</div>
+      <div class="info">Category: ${m.strCategory}</div>
+      <div class="info">Area: ${m.strArea}</div>
+    </div>`).join('');
+}
+
+function filterSort(){
+  const s = search.value.toLowerCase();
+  let list = data.filter(m =>
+    m.strMeal.toLowerCase().includes(s) ||
+    m.strCategory.toLowerCase().includes(s)
+  );
+  if(sort.value){
+    const [key,order] = sort.value.split('-');
+    list.sort((a,b)=>{
+      const aVal = key==='name'?a.strMeal:a.strArea;
+      const bVal = key==='name'?b.strMeal:b.strArea;
+      return order==='asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    });
+  }
+  show(list);
+}
+
+search.oninput = filterSort;
+sort.onchange = filterSort;
+
+getMeals();
+</script>
+
+</body>
+</html>
