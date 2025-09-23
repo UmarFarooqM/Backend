@@ -1,69 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Product Itinerary</title>
-<style>
-body{font-family:Arial,sans-serif;margin:20px;background:#f7f7f7}
-h1{text-align:center}
-form{background:white;padding:15px;border-radius:5px;max-width:400px;margin:auto;box-shadow:0 0 5px #ccc}
-form input{width:90%;padding:8px;margin:8px 0}
-button{padding:8px 12px;margin:5px;cursor:pointer}
-table{width:100%;border-collapse:collapse;margin-top:20px;background:white}
-th,td{border:1px solid #ccc;padding:8px;text-align:center}
-th{background:#3498db;color:white}
-.action-btn{background:#3498db;color:white;border:none;border-radius:3px}
-.delete-btn{background:#e74c3c}
-.edit-input{width:60px;padding:4px}
-</style>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Itinerary</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f7f7f7;
+      }
+      h1 {
+        text-align: center;
+      }
+      form {
+        background: white;
+        padding: 15px;
+        border-radius: 5px;
+        max-width: 400px;
+        margin: auto;
+        box-shadow: 0 0 5px #ccc;
+      }
+      form input {
+        width: 90%;
+        padding: 8px;
+        margin: 8px 0;
+      }
+      button {
+        padding: 8px 12px;
+        margin: 5px;
+        cursor: pointer;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: white;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background: #3498db;
+        color: white;
+      }
+      .action-btn {
+        background: #3498db;
+        color: white;
+        border: none;
+        border-radius: 3px;
+      }
+      .delete-btn {
+        background: #e74c3c;
+      }
+      .edit-input {
+        width: 60px;
+        padding: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Product Itinerary Table</h1>
 
-<h1>Product Itinerary Table</h1>
+    <form id="productForm">
+      <input type="text" id="name" placeholder="Product Name" required />
+      <input type="number" id="quantity" placeholder="Quantity" required />
+      <input type="number" id="cost" placeholder="Cost per Unit" required />
+      <input
+        type="number"
+        id="sold"
+        placeholder="Sold Quantity (optional)"
+        value="0"
+      />
+      <button type="submit">Add Product</button>
+    </form>
 
-<form id="productForm">
-  <input type="text" id="name" placeholder="Product Name" required>
-  <input type="number" id="quantity" placeholder="Quantity" required>
-  <input type="number" id="cost" placeholder="Cost per Unit" required>
-  <input type="number" id="sold" placeholder="Sold Quantity (optional)" value="0">
-  <button type="submit">Add Product</button>
-</form>
+    <table id="productTable">
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Quantity</th>
+          <th>Cost/Unit</th>
+          <th>Sold Qty</th>
+          <th>Total Cost</th>
+          <th>Total Sell</th>
+          <th>Total Benefit</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-<table id="productTable">
-  <thead>
-    <tr>
-      <th>Product Name</th>
-      <th>Quantity</th>
-      <th>Cost/Unit</th>
-      <th>Sold Qty</th>
-      <th>Total Cost</th>
-      <th>Total Sell</th>
-      <th>Total Benefit</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+    <script>
+      const form = document.getElementById("productForm");
+      const tableBody = document.querySelector("#productTable tbody");
 
-<script>
-const form = document.getElementById("productForm");
-const tableBody = document.querySelector("#productTable tbody");
+      function getProducts() {
+        return JSON.parse(localStorage.getItem("products")) || [];
+      }
 
-function getProducts(){
-  return JSON.parse(localStorage.getItem("products")) || [];
-}
+      function saveProducts(products) {
+        localStorage.setItem("products", JSON.stringify(products));
+      }
 
-function saveProducts(products){
-  localStorage.setItem("products", JSON.stringify(products));
-}
-
-function renderTable(){
-  const products = getProducts();
-  tableBody.innerHTML = "";
-  products.forEach((p,i)=>{
-    const row = document.createElement("tr");
-    row.innerHTML = `
+      function renderTable() {
+        const products = getProducts();
+        tableBody.innerHTML = "";
+        products.forEach((p, i) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
       <td>${p.name}</td>
       <td>${p.quantity}</td>
       <td>${p.cost}</td>
@@ -76,55 +124,56 @@ function renderTable(){
         <button class="action-btn delete-btn" onclick="deleteProduct(${i})">Delete</button>
       </td>
     `;
-    tableBody.appendChild(row);
-  });
-}
+          tableBody.appendChild(row);
+        });
+      }
 
-function addProduct(e){
-  e.preventDefault();
-  const name = document.getElementById("name").value.trim();
-  const quantity = parseInt(document.getElementById("quantity").value);
-  const cost = parseFloat(document.getElementById("cost").value);
-  const sold = parseInt(document.getElementById("sold").value || 0);
-  const product = {
-    name, quantity, cost,
-    sold,
-    totalSell: 0,
-    totalBenefit: 0
-  };
-  const products = getProducts();
-  products.push(product);
-  saveProducts(products);
-  form.reset();
-  renderTable();
-}
+      function addProduct(e) {
+        e.preventDefault();
+        const name = document.getElementById("name").value.trim();
+        const quantity = parseInt(document.getElementById("quantity").value);
+        const cost = parseFloat(document.getElementById("cost").value);
+        const sold = parseInt(document.getElementById("sold").value || 0);
+        const product = {
+          name,
+          quantity,
+          cost,
+          sold,
+          totalSell: 0,
+          totalBenefit: 0,
+        };
+        const products = getProducts();
+        products.push(product);
+        saveProducts(products);
+        form.reset();
+        renderTable();
+      }
 
-function editProduct(index){
-  const products = getProducts();
-  const p = products[index];
-  const newSold = prompt("Enter Sold Quantity", p.sold);
-  const newSell = prompt("Enter Total Sell", p.totalSell);
-  if(newSold!==null && newSell!==null){
-    p.sold = parseInt(newSold);
-    p.totalSell = parseFloat(newSell);
-    const totalCost = p.quantity * p.cost;
-    p.totalBenefit = p.totalSell - totalCost;
-    products[index] = p;
-    saveProducts(products);
-    renderTable();
-  }
-}
+      function editProduct(index) {
+        const products = getProducts();
+        const p = products[index];
+        const newSold = prompt("Enter Sold Quantity", p.sold);
+        const newSell = prompt("Enter Total Sell", p.totalSell);
+        if (newSold !== null && newSell !== null) {
+          p.sold = parseInt(newSold);
+          p.totalSell = parseFloat(newSell);
+          const totalCost = p.quantity * p.cost;
+          p.totalBenefit = p.totalSell - totalCost;
+          products[index] = p;
+          saveProducts(products);
+          renderTable();
+        }
+      }
 
-function deleteProduct(index){
-  const products = getProducts();
-  products.splice(index,1);
-  saveProducts(products);
-  renderTable();
-}
+      function deleteProduct(index) {
+        const products = getProducts();
+        products.splice(index, 1);
+        saveProducts(products);
+        renderTable();
+      }
 
-form.addEventListener("submit", addProduct);
-window.onload = renderTable;
-</script>
-
-</body>
+      form.addEventListener("submit", addProduct);
+      window.onload = renderTable;
+    </script>
+  </body>
 </html>

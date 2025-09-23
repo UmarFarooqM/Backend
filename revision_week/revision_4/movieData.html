@@ -1,56 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Movie Fetch with Delay</title>
-<style>
-body{font-family:Arial,sans-serif;background:#f4f4f4;margin:0;padding:20px;text-align:center}
-h1{margin-bottom:20px}
-#loader{display:flex;flex-direction:column;align-items:center;margin-top:50px}
-.lds-ring{display:inline-block;position:relative;width:80px;height:80px}
-.lds-ring div{box-sizing:border-box;display:block;position:absolute;width:64px;height:64px;margin:8px;border:8px solid #3498db;border-radius:50%;animation:lds-ring 1.2s cubic-bezier(0.5,0,0.5,1) infinite;border-color:#3498db transparent transparent transparent}
-.lds-ring div:nth-child(1){animation-delay:-0.45s}
-.lds-ring div:nth-child(2){animation-delay:-0.3s}
-.lds-ring div:nth-child(3){animation-delay:-0.15s}
-@keyframes lds-ring{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-#movies{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:30px}
-.movie-card{background:white;border-radius:10px;padding:10px;box-shadow:0 4px 6px rgba(0,0,0,0.1);transition:transform 0.3s ease}
-.movie-card:hover{transform:translateY(-5px)}
-.movie-card img{width:100%;height:320px;object-fit:cover;border-radius:6px}
-.movie-title{font-weight:bold;margin:10px 0 5px}
-.movie-info{color:#555;font-size:14px}
-</style>
-</head>
-<body>
-<h1>🎬 Movie Explorer</h1>
-<div id="loader"><div class="lds-ring"><div></div><div></div><div></div><div></div></div><p>Loading movies...</p></div>
-<div id="movies"></div>
-<script>
-setTimeout(function(){
-fetch("https://www.omdbapi.com/?s=Avengers&apikey=564727fa")
-.then(res=>res.json())
-.then(data=>{
-document.getElementById("loader").style.display="none";
-if(data.Search){
-data.Search.forEach(m=>{
-let card=document.createElement("div");
-card.className="movie-card";
-card.innerHTML=`<img src="${m.Poster!=="N/A"?m.Poster:"https://via.placeholder.com/220x320"}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Fetch with Delay</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+      }
+      h1 {
+        margin-bottom: 20px;
+      }
+      #loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+      }
+      .lds-ring {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+      }
+      .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid #3498db;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #3498db transparent transparent transparent;
+      }
+      .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+      }
+      .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+      }
+      .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+      }
+      @keyframes lds-ring {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      #movies {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+      }
+      .movie-card {
+        background: white;
+        border-radius: 10px;
+        padding: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .movie-card:hover {
+        transform: translateY(-5px);
+      }
+      .movie-card img {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        border-radius: 6px;
+      }
+      .movie-title {
+        font-weight: bold;
+        margin: 10px 0 5px;
+      }
+      .movie-info {
+        color: #555;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🎬 Movie Explorer</h1>
+    <div id="loader">
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <p>Loading movies...</p>
+    </div>
+    <div id="movies"></div>
+    <script>
+      setTimeout(function () {
+        fetch("https://www.omdbapi.com/?s=Avengers&apikey=564727fa")
+          .then((res) => res.json())
+          .then((data) => {
+            document.getElementById("loader").style.display = "none";
+            if (data.Search) {
+              data.Search.forEach((m) => {
+                let card = document.createElement("div");
+                card.className = "movie-card";
+                card.innerHTML = `<img src="${
+                  m.Poster !== "N/A"
+                    ? m.Poster
+                    : "https://via.placeholder.com/220x320"
+                }">
 <div class="movie-title">${m.Title}</div>
 <div class="movie-info">Year: ${m.Year}</div>
 <div class="movie-info">Type: ${m.Type}</div>`;
-document.getElementById("movies").appendChild(card);
-});
-}else{
-document.getElementById("movies").innerHTML="<p>No movies found.</p>";
-}
-})
-.catch(()=>{
-document.getElementById("loader").style.display="none";
-document.getElementById("movies").innerHTML="<p>Failed to load movies.</p>";
-});
-},5000);
-</script>
-</body>
+                document.getElementById("movies").appendChild(card);
+              });
+            } else {
+              document.getElementById("movies").innerHTML =
+                "<p>No movies found.</p>";
+            }
+          })
+          .catch(() => {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("movies").innerHTML =
+              "<p>Failed to load movies.</p>";
+          });
+      }, 5000);
+    </script>
+  </body>
 </html>
